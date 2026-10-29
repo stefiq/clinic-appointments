@@ -1,4 +1,89 @@
-### GET request to example server
-GET http://localhost:8080/hello
+### GET home
+GET http://localhost:8080/
 
-###
+### POST / add new patient
+POST http://localhost:8080/patients
+Content-Type: application/json
+
+{
+  "id": 0,
+  "firstName": "Ana",
+  "lastName": "Ionescu",
+  "phoneNumber": "0712345678",
+  "cnp": "2900101123456",
+  "email": "ana@mail.com",
+  "birthDate": "1990-01-01"
+}
+
+### GET all patients
+GET http://localhost:8080/patients
+
+### GET patient by id
+GET http://localhost:8080/patients/0
+
+### PATCH / change only firstName
+PATCH http://localhost:8080/patients/0
+Content-Type: application/json
+
+{
+  "firstName": "Maria"
+}
+
+### GET to check PATCH (only firstName changed)
+GET http://localhost:8080/patients/0
+
+### PATCH / change two fields
+PATCH http://localhost:8080/patients/0
+Content-Type: application/json
+
+{
+  "phoneNumber": "0700000000",
+  "email": "maria@mail.com"
+}
+
+### PATCH on patient that doesn't exist (expect error)
+PATCH http://localhost:8080/patients/99
+Content-Type: application/json
+
+{
+  "firstName": "Test"
+}
+
+### PUT / replace everything (only firstName sent)
+PUT http://localhost:8080/patients/0
+Content-Type: application/json
+
+{
+  "firstName": "Elena"
+}
+
+### GET to check PUT (everything else is null)
+GET http://localhost:8080/patients/0
+
+### PUT / full replace
+PUT http://localhost:8080/patients/0
+Content-Type: application/json
+
+{
+  "firstName": "Ana",
+  "lastName": "Ionescu",
+  "phoneNumber": "0712345678",
+  "cnp": "2900101123456",
+  "email": "ana@mail.com",
+  "birthDate": "1990-01-01"
+}
+
+### PUT on patient that doesn't exist (expect error)
+PUT http://localhost:8080/patients/99
+Content-Type: application/json
+
+{
+  "firstName": "Test"
+}
+
+### DELETE patient
+DELETE http://localhost:8080/patients/0
+
+### DELETE patient that doesn't exist
+DELETE http://localhost:8080/patients/99
+
