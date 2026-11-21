@@ -1,0 +1,16 @@
+### GET request to example server
+DELETE http://localhost:8080/patients/0
+
+###
+POST http://localhost:8080/patients
+Content-Type: application/json
+
+{
+  "id": 0,
+  "firstName": "Ana",
+  "lastName": "Ionescu",
+  "phoneNumber": "0712345678",
+  "cnp": "2900101123456",
+  "email": "ana@mail.com",
+  "birthDate": "1990-01-01"
+}
