@@ -2,8 +2,11 @@ package com.clinic.clinic.service;
 
 import com.clinic.clinic.entity.Patient;
 import com.clinic.clinic.repository.PatientRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,8 +17,15 @@ public class PatientService {
     this.repo = repo;
   }
 
-  public List<Patient> seeAllPatients() {
-    return repo.getListPatients();
+  public List<Patient> seeAllPatients(String firstName, String lastName) {
+    List<Patient> newList = new ArrayList<>();
+    for (Patient p : repo.getListPatients()) {
+      if ((firstName == null || firstName.equals(p.getFirstName()))
+              && (lastName == null || lastName.equals(p.getLastName()))) {
+        newList.add(p);
+      }
+    }
+    return newList;
   }
 
   public Patient addPatient(Patient p) {
@@ -23,29 +33,34 @@ public class PatientService {
     return p;
   }
 
-  public Patient findPatientById(long id) throws RuntimeException{
+  public Patient findPatientById(long id) throws RuntimeException {
     for (Patient p : repo.getListPatients()) {
       if (p.getId() == id) {
         return p;
       }
     }
-    throw new RuntimeException("Patient not found");
+    throw new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Patient not found with id " + id
+    );
   }
 
-  public String deletePatientById(long id){
-    for(Patient p:repo.getListPatients()){
-      if(p.getId() == id){
+  public String deletePatientById(long id) {
+    for (Patient p : repo.getListPatients()) {
+      if (p.getId() == id) {
         repo.deletePatient(p);
         return "Pacient deleted succesfully.";
-
       }
     }
-    return "The pacient with the id " + id + " doesn't exist!";
+    throw new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Patient not found with id " + id
+    );
   }
 
-  public Patient changePatientInfo(long id,Patient p) throws RuntimeException{
-    for(Patient pat : repo.getListPatients()){
-      if(pat.getId() == id){
+  public Patient changePatientInfo(long id, Patient p) throws RuntimeException {
+    for (Patient pat : repo.getListPatients()) {
+      if (pat.getId() == id) {
         pat.setCnp(p.getCnp());
         pat.setEmail(p.getEmail());
         pat.setBirthDate(p.getBirthDate());
@@ -55,13 +70,16 @@ public class PatientService {
         return pat;
       }
     }
-    throw new RuntimeException("The Patient with id "+ id + " doesn't exists!");
+    throw new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Patient not found with id " + id
+    );
   }
 
-  public Patient changePatientField(long id, Patient p) throws RuntimeException{
-    for(Patient pat : repo.getListPatients()){
-      if(pat.getId() == id){
-        //daca campul nu e null in inlocuiesc, altfel o las asa;
+  public Patient changePatientField(long id, Patient p) throws RuntimeException {
+    for (Patient pat : repo.getListPatients()) {
+      if (pat.getId() == id) {
+        // daca campul nu e null in inlocuiesc, altfel o las asa;
         if (p.getFirstName() != null) {
           pat.setFirstName(p.getFirstName());
         }
@@ -84,6 +102,9 @@ public class PatientService {
       }
     }
 
-    throw new RuntimeException("The Patient with id " + id +" doesn't exist!");
+    throw new ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Patient not found with id " + id
+    );
   }
 }

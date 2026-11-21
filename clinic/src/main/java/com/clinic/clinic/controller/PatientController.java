@@ -9,39 +9,43 @@ import java.util.List;
 @RestController
 public class PatientController {
 
-    private final PatientService service;
+  private final PatientService service;
 
-    public PatientController(PatientService s){
-        this.service = s;
-    }
+  public PatientController(PatientService s) {
+    this.service = s;
+  }
 
-    @GetMapping("/patients")
-    public List<Patient> seeAllPatients() {
-        return service.seeAllPatients();
-    }
+  //accepts querys
+  @GetMapping("/patients")
+  public List<Patient> seeAllPatients(
+      @RequestParam(required = false) String firstName,
+      @RequestParam(required = false) String lastName) {
+      return service.seeAllPatients(firstName,lastName);
+  }
 
-    @GetMapping("/patients/{id}")
-    public Patient findPatientById(@PathVariable long id){
-        return service.findPatientById(id);
-    }
-    @PostMapping("/patients")
-    public Patient addPatient(@RequestBody Patient p){
-        return service.addPatient(p);
-    }
+  @GetMapping("/patients/{id}")
+  public Patient findPatientById(@PathVariable long id) {
+    return service.findPatientById(id);
+  }
 
-    @DeleteMapping("/patients/{id}")
-    public String deletePatientById(@PathVariable long id){
-        return service.deletePatientById(id);
-    }
+  @PostMapping("/patients")
+  public Patient addPatient(@RequestBody Patient p) {
+    return service.addPatient(p);
+  }
 
-    @PutMapping("/patients/{id}")
-    public Patient changePatientInfo(@PathVariable long id, @RequestBody Patient p){
-        return service.changePatientInfo(id,p);
-    }
+  @DeleteMapping("/patients/{id}")
+  public String deletePatientById(@PathVariable long id) {
+    return service.deletePatientById(id);
+  }
 
-    //setezi un camp daca in cerere nu e null;
-    @PatchMapping("/patients/{id}")
-    public Patient changePatientField(@PathVariable long id, @RequestBody Patient p){
-        return service.changePatientField(id,p);
-    }
+  @PutMapping("/patients/{id}")
+  public Patient changePatientInfo(@PathVariable long id, @RequestBody Patient p) {
+    return service.changePatientInfo(id, p);
+  }
+
+  // setezi un camp daca in cerere nu e null;
+  @PatchMapping("/patients/{id}")
+  public Patient changePatientField(@PathVariable long id, @RequestBody Patient p) {
+    return service.changePatientField(id, p);
+  }
 }
